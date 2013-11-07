@@ -14,7 +14,9 @@ $ lein sphinx
 
 ## Configuration
 
-To configure lein-sphinx for your project add a map of the configuration options to the :sphinx key of your project map (or to a specific profile if you prefer). The :sphinx map can have the following keys:
+To configure lein-sphinx for your project add a map of the [configuration options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
+
+The :sphinx map can have the following keys:
 
 * `:builder` *(default: html)*: the Sphinx builder that will be invoked. It is one of: :html, :dirhtml, :singlehtml, :htmlhelp, :qhelp, :devhelp, :epub, :latex, :man, :texinfo, :text, :gettext, :doctest, :linkcheck
 * `:source` *(default: "doc")*: Location of the documentation source directory
