@@ -6,19 +6,13 @@
   :eval-in-leiningen true
 
   :profiles {
-    :qa {
+    :dev {
       :dependencies [
         [midje "1.6-beta1"] ; Example-based testing https://github.com/marick/Midje
       ]
+      :plugins [
+        [lein-midje "3.1.3-RC2"] ; Example-based testing https://github.com/marick/lein-midje
+      ]
     }
   }
-
-  :plugins [
-    [lein-midje "3.1.3-RC2"] ; Example-based testing https://github.com/marick/lein-midje
-  ]
-
-  :aliases {
-    "midje" ["with-profile" "qa" "midje"] ; run unit tests
-  }
-
 )
