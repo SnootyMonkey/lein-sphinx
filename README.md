@@ -1,4 +1,4 @@
-# -= lein-sphinx =-
+# -= lein-sphinx =- [![Build Status](https://travis-ci.org/SnootyMonkey/lein-sphinx.png?branch=master)](https://travis-ci.org/SnootyMonkey/lein-sphinx)
 
 A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reStructuredText](http://docutils.sourceforge.net/rst.html) using [Sphinx](http://sphinx-doc.org/).
 
