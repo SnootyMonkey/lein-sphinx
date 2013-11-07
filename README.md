@@ -1,4 +1,4 @@
-# lein-sphinx
+# -= lein-sphinx =-
 
 A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reStructuredText](http://docutils.sourceforge.net/rst.html) using [Sphinx](http://sphinx-doc.org/).
 
