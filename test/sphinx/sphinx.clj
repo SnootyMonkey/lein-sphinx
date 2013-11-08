@@ -32,52 +32,52 @@
 	(fact "specifying tags includes tags arguments"
 		(map-to-command {:sphinx {:tags []}}) => "sphinx-build -b html -c doc doc doc/_build"
 		(map-to-command {:sphinx {:tags [:foo]}}) =>
-			"sphinx-build -b html -c doc -t 'foo' doc doc/_build"
+			"sphinx-build -b html -c doc -t foo doc doc/_build"
 		(map-to-command {:sphinx {:tags [:foo :bar]}}) =>
-			"sphinx-build -b html -c doc -t 'foo' -t 'bar' doc doc/_build"
+			"sphinx-build -b html -c doc -t foo -t bar doc doc/_build"
 		(map-to-command {:sphinx {:tags [:foo :bar :blat]}}) =>
-			"sphinx-build -b html -c doc -t 'foo' -t 'bar' -t 'blat' doc doc/_build")
+			"sphinx-build -b html -c doc -t foo -t bar -t blat doc doc/_build")
 
 	(fact "specifying settings values includes settings arguments"
 		(map-to-command {:sphinx {:setting-values {}}}) => "sphinx-build -b html -c doc doc doc/_build"
 		(map-to-command {:sphinx {:setting-values {:pygments_style "solarizedlight"}}}) =>
-			"sphinx-build -b html -c doc -D pygments_style='solarizedlight' doc doc/_build"
+			"sphinx-build -b html -c doc -D pygments_style=solarizedlight doc doc/_build"
 		(let [command (map-to-command {:sphinx {:setting-values 
 				{:pygments_style "solarizedlight"
 				:html_theme_options.linkcolor "#B86644"}}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
-			command => (contains " -D pygments_style='solarizedlight' ")
-			command => (contains " -D html_theme_options.linkcolor='#B86644' ")
+			command => (contains " -D pygments_style=solarizedlight ")
+			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
 			command => (has-suffix " doc doc/_build"))
 		(let [command (map-to-command {:sphinx {:setting-values
 				{:pygments_style "solarizedlight"
 				 :html_theme_options.linkcolor "#B86644"
 				 :html_theme_options.visitedlinkcolor "#B86644"}}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
-			command => (contains " -D pygments_style='solarizedlight' ")
-			command => (contains " -D html_theme_options.linkcolor='#B86644' ")
-			command => (contains " -D html_theme_options.visitedlinkcolor='#B86644' ")
+			command => (contains " -D pygments_style=solarizedlight ")
+			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
+			command => (contains " -D html_theme_options.visitedlinkcolor=#B86644 ")
 			command => (has-suffix " doc doc/_build")))
 
 	(fact "specifying html template values includes html template arguments"
 		(map-to-command {:sphinx {:html-template-values {}}}) => "sphinx-build -b html -c doc doc doc/_build"
 		(map-to-command {:sphinx {:html-template-values {:author "Albert Camus"}}}) =>
-			"sphinx-build -b html -c doc -A author='Albert Camus' doc doc/_build"
+			"sphinx-build -b html -c doc -A author=Albert Camus doc doc/_build"
 		(let [command (map-to-command {:sphinx {:html-template-values 
 				{:author "Albert Camus"
 				 :mascot "Fighting Ferret"}}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
-			command => (contains " -A author='Albert Camus' ")
-			command => (contains " -A mascot='Fighting Ferret' ")
+			command => (contains " -A author=Albert Camus ")
+			command => (contains " -A mascot=Fighting Ferret ")
 			command => (has-suffix " doc doc/_build"))
 		(let [command (map-to-command {:sphinx {:html-template-values 
 				{:author "Albert Camus"
 				 :mascot "Fighting Ferret"
 				 :publication "Combat"}}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
-			command => (contains " -A author='Albert Camus' ")
-			command => (contains " -A mascot='Fighting Ferret' ")
-			command => (contains " -A publication='Combat' ")
+			command => (contains " -A author=Albert Camus ")
+			command => (contains " -A mascot=Fighting Ferret ")
+			command => (contains " -A publication=Combat ")
 			command => (has-suffix " doc doc/_build")))
 
 	(fact "a complete simple configuration generates the right command"
@@ -107,12 +107,12 @@
 					:mascot "Fighting Ferret"
 				}
 			}})]
-			command => (has-prefix "sphinx-build -b singlehtml -c . -a -E -n -W -t 'html' -t 'draft'")
-			command => (contains " -D pygments_style='solarizedlight' ")
-			command => (contains " -D html_theme_options.linkcolor='#B86644' ")
-			command => (contains " -D html_theme_options.visitedlinkcolor='#B86644' ")
-			command => (contains " -A author='Albert Camus' ")
-			command => (contains " -A mascot='Fighting Ferret' ")
+			command => (has-prefix "sphinx-build -b singlehtml -c . -a -E -n -W -t html -t draft")
+			command => (contains " -D pygments_style=solarizedlight ")
+			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
+			command => (contains " -D html_theme_options.visitedlinkcolor=#B86644 ")
+			command => (contains " -A author=Albert Camus ")
+			command => (contains " -A mascot=Fighting Ferret ")
 			command => (has-suffix " docs docs/HTML")))
 
 

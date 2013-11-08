@@ -10,12 +10,12 @@
 (defn- tags-args
 	"Output a string of tag arguments for the sequence"
 	[tags]
-	(flatten (map #(vec ["-t" (str "'" (name %) "'")]) tags)))
+	(flatten (map #(vec ["-t" (name %)]) tags)))
 
 (defn- map-to-args
 	"Output a string of tag arguments for the sequence"
 	[flag arg-map]
-	(flatten (map #(vec [flag  (str (name %) "='" (% arg-map) "'")]) (keys arg-map))))
+	(flatten (map #(vec [flag  (str (name %) "=" (% arg-map))]) (keys arg-map))))
 
 (defn- sphinx-opts
 	"Apply the default options"
