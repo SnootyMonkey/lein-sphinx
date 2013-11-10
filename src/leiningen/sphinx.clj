@@ -2,11 +2,6 @@
 	(:require [clojure.string :as s]
 						[clojure.java.shell :refer (sh)]))
 
-(defn- check-opts
-	"Make sure the supplied options are valid"
-	[opts]
-	opts)
-
 (defn- tags-args
 	"Output a string of tag arguments for the sequence"
 	[tags]
@@ -20,25 +15,24 @@
 (defn- sphinx-opts
 	"Apply the default options"
 	[project]
-	(check-opts 
-		(let [opts (:sphinx project)
-					source (get opts :source "doc")]
-			{
-				:builder (name (get opts :builder :html))
-				:source source
-				:output (get opts :output (str source "/_build"))
-				:config (get opts :config source)
-				:rebuild (if (get opts :rebuild) "-a -E" nil)
-				:nitpicky (if (get opts :nitpicky) "-n" nil)
-				:warn-as-error (if (get opts :warn-as-error) "-W" nil)
-				:tags (tags-args (get opts :tags []))
-				:setting-values (map-to-args "-D" (get opts :setting-values {}))
-				:html-template-values (map-to-args "-A" (get opts :html-template-values {}))})))
+	(let [opts (:sphinx project)
+				source (get opts :source "doc")]
+		{
+			:builder (name (get opts :builder :html))
+			:source source
+			:output (get opts :output (str source "/_build"))
+			:config (get opts :config source)
+			:rebuild (if (get opts :rebuild) "-a -E" nil)
+			:nitpicky (if (get opts :nitpicky) "-n" nil)
+			:warn-as-error (if (get opts :warn-as-error) "-W" nil)
+			:tags (tags-args (get opts :tags []))
+			:setting-values (map-to-args "-D" (get opts :setting-values {}))
+			:html-template-values (map-to-args "-A" (get opts :html-template-values {}))}))
 
-(defn- opts-to-command
-	"Turn the options into a sphinx-build command"
+(defn- sphinx-command
+	"Turn the project :sphinx options into a sphinx-build command"
 	[project]
-	(let [opts (check-opts (sphinx-opts project))]
+	(let [opts (sphinx-opts project)]
 		(remove s/blank? (flatten [
 			"sphinx-build"
 			"-b" (:builder opts)
@@ -55,9 +49,9 @@
 (defn sphinx
   "Build Sphinx documentation"
   [project & args]
-  (let [command (opts-to-command project)
+	(let [command (sphinx-command project)
   			result (apply sh command)]
   	(println "\nRunning Sphinx as:")
   	(println (s/join " " command) "\n\n")
   	(println (:out result))
-  	(if-not (= 0 (:exit result)) (println (:err result)))))
+  	(if-not (s/blank? (:err result)) (println (:err result)))))

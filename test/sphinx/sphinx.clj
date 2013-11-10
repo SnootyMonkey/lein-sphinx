@@ -4,15 +4,41 @@
   					[clojure.string :as s]
   					[leiningen.sphinx]))
 
-(testable-privates leiningen.sphinx opts-to-command)
+(testable-privates leiningen.sphinx sphinx-command)
+
+(def simple-config
+	{:sphinx {
+		:builder :dirhtml
+		:source "API/REST"}})
+
+(def complex-config 
+	{:sphinx {
+		:builder :singlehtml
+		:source "docs"
+		:output "docs/HTML"
+		:config "."
+		:rebuild true
+		:tags [:html, :draft]
+		:nitpicky true
+		:warn-as-error true
+		:setting-values {
+			:pygments_style "solarizedlight"
+			:html_theme_options.linkcolor "#B86644"
+			:html_theme_options.visitedlinkcolor "#B86644"
+		}
+		:html-template-values {
+			:author "Albert Camus"
+			:mascot "Fighting Ferret"
+		}}})
 
 (defn- map-to-command [opts-map]
-	(s/join " " (opts-to-command opts-map)))
+	(s/join " " (sphinx-command opts-map)))
 
 (facts "about valid configurations generating a build-sphinx command"
 
 	(fact "there is a resonable default when no options are provided"
-		(map-to-command {}) => "sphinx-build -b html -c doc doc doc/_build")
+		(map-to-command {}) => "sphinx-build -b html -c doc doc doc/_build"
+		(map-to-command {:sphinx {}}) => "sphinx-build -b html -c doc doc doc/_build")
 
 	(fact "specifying the source option includes the correct source and output directories"
 		(map-to-command {:sphinx {:source "foo"}}) => "sphinx-build -b html -c foo foo foo/_build")
@@ -81,39 +107,15 @@
 			command => (has-suffix " doc doc/_build")))
 
 	(fact "a complete simple configuration generates the right command"
-		(map-to-command {:sphinx {
-												:builder :dirhtml
-												:source "API/REST"}}) =>
+		(map-to-command simple-config) =>
 			"sphinx-build -b dirhtml -c API/REST API/REST API/REST/_build")
 
 	(fact "a complete complex configuration generates the right command"
-		(let [command (map-to-command
-			{:sphinx {
-				:builder :singlehtml
-				:source "docs"
-				:output "docs/HTML"
-				:config "."
-				:rebuild true
-				:tags [:html, :draft]
-				:nitpicky true
-				:warn-as-error true
-				:setting-values {
-					:pygments_style "solarizedlight"
-					:html_theme_options.linkcolor "#B86644"
-					:html_theme_options.visitedlinkcolor "#B86644"
-				}
-				:html-template-values {
-					:author "Albert Camus"
-					:mascot "Fighting Ferret"
-				}
-			}})]
+		(let [command (map-to-command complex-config)]
 			command => (has-prefix "sphinx-build -b singlehtml -c . -a -E -n -W -t html -t draft")
 			command => (contains " -D pygments_style=solarizedlight ")
 			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
 			command => (contains " -D html_theme_options.visitedlinkcolor=#B86644 ")
 			command => (contains " -A author=Albert Camus ")
 			command => (contains " -A mascot=Fighting Ferret ")
-			command => (has-suffix " docs docs/HTML")))
-
-
-(facts "about invalid configurations providing errors"))
+			command => (has-suffix " docs docs/HTML"))))
