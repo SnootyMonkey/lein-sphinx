@@ -14,7 +14,7 @@ $ lein sphinx
 
 ## Configuration
 
-To configure lein-sphinx for your project add a map of the [configuration options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
+To configure lein-sphinx for your project add a map of the [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
 
 The :sphinx map can have the following keys:
 
@@ -64,7 +64,58 @@ Verbose configuration example:
 
 ## Advanced Configuration
 
-lein-sphinx invokes sphinx-build with the options specified, which means you build your docs just one way with one invocation of sphinx-build. This is sufficient for most projects, but if you need to build multiple doc sets, or build with multiple configurations, lein-sphinx still has you covered.
+### Multiple Doc Sets
+
+Normally lein-sphinx invokes sphinx-build once with the options specified, which means you produce just one set of docs. This is sufficient for many projects, but if your project has multiple sets of documentation, or if you build your docs with multiple configurations, lein-sphinx still has you covered. In these scenarios, rather than providing a map of configuration options, your configuration is a map of maps, with a configuration for each build you need.
+
+Configuration with multiple builds:
+
+:sphinx {
+	:html {
+		:builder :html
+		:source "API/REST"
+		:output "docs/HTML"
+	}
+	:pdf {
+		:builder :pdf
+		:source "API/REST"
+		:output "docs/PDF"
+		:tags [:pdf, :toc]
+	}
+	:latex {
+		:builder :latex
+		:source "API/REST"
+		:output "docs/latex"
+		:tags [:toc]
+	}
+}
+
+Invoking lein sphinx as normal will invoke sphinx-build for each configuration:
+
+```console
+$ lein sphinx
+```
+Invoking lein sphinx with additional arguments will invoke sphinx-build for just the specified configurations:
+
+```console
+$ lein sphinx html pdf
+```
+
+### Additional configuration options
+
+There are some relatively obscure [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) not included in the lein-sphinx configuration map. You can use one of these additional options with the :additional-options key. Arguments provided in :additional-options will be passed on to the invocation of sphinx-build.
+
+Configuration with additional options:
+
+```clojure
+:sphinx {
+	:builder :singlehtml
+	:source "docs"
+	:output "docs/HTML"
+	:warn-as-error true
+	:additional-options "-d ./trees -C"
+}
+```
 
 ## Issues and Feature Requests
 

@@ -7,12 +7,13 @@
 (testable-privates leiningen.sphinx sphinx-command)
 
 (def simple-config
-	{:sphinx {
+	{
 		:builder :dirhtml
-		:source "API/REST"}})
+		:source "API/REST"
+	})
 
 (def complex-config 
-	{:sphinx {
+	{
 		:builder :singlehtml
 		:source "docs"
 		:output "docs/HTML"
@@ -29,56 +30,77 @@
 		:html-template-values {
 			:author "Albert Camus"
 			:mascot "Fighting Ferret"
-		}}})
+		}
+		:additional-options "-d ./trees -C"
+	})
+
+(def multiple-config
+	{:html {
+		:builder :html
+		:source "API/REST"
+		:output "docs/HTML"
+	}
+	:pdf {
+		:builder :pdf
+		:source "API/REST"
+		:output "docs/PDF"
+		:tags [:pdf, :toc]
+	}
+	:latex {
+		:builder :latex
+		:source "API/REST"
+		:output "docs/latex"
+		:tags [:toc]
+	}})
 
 (defn- map-to-command [opts-map]
 	(s/join " " (sphinx-command opts-map)))
 
-(facts "about valid configurations generating a build-sphinx command"
+(facts "about valid configurations generating a single build-sphinx command"
 
 	(fact "there is a resonable default when no options are provided"
-		(map-to-command {}) => "sphinx-build -b html -c doc doc doc/_build"
-		(map-to-command {:sphinx {}}) => "sphinx-build -b html -c doc doc doc/_build")
+		(map-to-command nil) => "sphinx-build -b html -c doc doc doc/_build"
+		(map-to-command {}) => "sphinx-build -b html -c doc doc doc/_build")
 
 	(fact "specifying the source option includes the correct source and output directories"
-		(map-to-command {:sphinx {:source "foo"}}) => "sphinx-build -b html -c foo foo foo/_build")
+		(map-to-command {:source "foo"}) => "sphinx-build -b html -c foo foo foo/_build")
 
 	(fact "specifying the ouput option includes the correct output directory"
-		(map-to-command {:sphinx {:output "foo/HTML"}}) => "sphinx-build -b html -c doc doc foo/HTML")
+		(map-to-command {:output "foo/HTML"}) => "sphinx-build -b html -c doc doc foo/HTML")
 
 	(fact "specifying the rebuild option includes the rebuild flags"
-		(map-to-command {:sphinx {:rebuild true}}) => "sphinx-build -b html -c doc -a -E doc doc/_build")
+		(map-to-command {:rebuild true}) => "sphinx-build -b html -c doc -a -E doc doc/_build")
 
 	(fact "specifying the nitpicky option includes the nitpicky flag"
-		(map-to-command {:sphinx {:nitpicky true}}) => "sphinx-build -b html -c doc -n doc doc/_build")
+		(map-to-command {:nitpicky true}) => "sphinx-build -b html -c doc -n doc doc/_build")
 
 	(fact "specifying the warn-as-error option includes the warn flag"
-		(map-to-command {:sphinx {:warn-as-error true}}) => "sphinx-build -b html -c doc -W doc doc/_build")
+		(map-to-command {:warn-as-error true}) => "sphinx-build -b html -c doc -W doc doc/_build")
 
 	(fact "specifying tags includes tags arguments"
-		(map-to-command {:sphinx {:tags []}}) => "sphinx-build -b html -c doc doc doc/_build"
-		(map-to-command {:sphinx {:tags [:foo]}}) =>
+		(map-to-command {:tags []}) => "sphinx-build -b html -c doc doc doc/_build"
+		(map-to-command {:tags [:foo]}) =>
 			"sphinx-build -b html -c doc -t foo doc doc/_build"
-		(map-to-command {:sphinx {:tags [:foo :bar]}}) =>
+		(map-to-command {:tags [:foo :bar]}) =>
 			"sphinx-build -b html -c doc -t foo -t bar doc doc/_build"
-		(map-to-command {:sphinx {:tags [:foo :bar :blat]}}) =>
+		(map-to-command {:tags [:foo :bar :blat]}) =>
 			"sphinx-build -b html -c doc -t foo -t bar -t blat doc doc/_build")
 
 	(fact "specifying settings values includes settings arguments"
-		(map-to-command {:sphinx {:setting-values {}}}) => "sphinx-build -b html -c doc doc doc/_build"
-		(map-to-command {:sphinx {:setting-values {:pygments_style "solarizedlight"}}}) =>
+		(map-to-command {:setting-values {}}) => "sphinx-build -b html -c doc doc doc/_build"
+		(map-to-command {:setting-values {:pygments_style "solarizedlight"}}) =>
 			"sphinx-build -b html -c doc -D pygments_style=solarizedlight doc doc/_build"
-		(let [command (map-to-command {:sphinx {:setting-values 
+		(let [command (map-to-command {:setting-values 
 				{:pygments_style "solarizedlight"
-				:html_theme_options.linkcolor "#B86644"}}})]
+				:html_theme_options.linkcolor "#B86644"}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
 			command => (contains " -D pygments_style=solarizedlight ")
 			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
 			command => (has-suffix " doc doc/_build"))
-		(let [command (map-to-command {:sphinx {:setting-values
+		(let [command (map-to-command {:setting-values
 				{:pygments_style "solarizedlight"
 				 :html_theme_options.linkcolor "#B86644"
-				 :html_theme_options.visitedlinkcolor "#B86644"}}})]
+				 :html_theme_options.visitedlinkcolor "#B86644"}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
 			command => (contains " -D pygments_style=solarizedlight ")
 			command => (contains " -D html_theme_options.linkcolor=#B86644 ")
@@ -86,25 +108,29 @@
 			command => (has-suffix " doc doc/_build")))
 
 	(fact "specifying html template values includes html template arguments"
-		(map-to-command {:sphinx {:html-template-values {}}}) => "sphinx-build -b html -c doc doc doc/_build"
-		(map-to-command {:sphinx {:html-template-values {:author "Albert Camus"}}}) =>
+		(map-to-command {:html-template-values {}}) => "sphinx-build -b html -c doc doc doc/_build"
+		(map-to-command {:html-template-values {:author "Albert Camus"}}) =>
 			"sphinx-build -b html -c doc -A author=Albert Camus doc doc/_build"
-		(let [command (map-to-command {:sphinx {:html-template-values 
+		(let [command (map-to-command {:html-template-values 
 				{:author "Albert Camus"
-				 :mascot "Fighting Ferret"}}})]
+				 :mascot "Fighting Ferret"}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
 			command => (contains " -A author=Albert Camus ")
 			command => (contains " -A mascot=Fighting Ferret ")
 			command => (has-suffix " doc doc/_build"))
-		(let [command (map-to-command {:sphinx {:html-template-values 
+		(let [command (map-to-command {:html-template-values 
 				{:author "Albert Camus"
 				 :mascot "Fighting Ferret"
-				 :publication "Combat"}}})]
+				 :publication "Combat"}})]
 			command => (has-prefix "sphinx-build -b html -c doc ")
 			command => (contains " -A author=Albert Camus ")
 			command => (contains " -A mascot=Fighting Ferret ")
 			command => (contains " -A publication=Combat ")
 			command => (has-suffix " doc doc/_build")))
+
+	(fact "specifying additional options includes them"
+		(map-to-command {:additional-options "-d ./trees -C"}) => 
+			"sphinx-build -b html -c doc -d ./trees -C doc doc/_build")
 
 	(fact "a complete simple configuration generates the right command"
 		(map-to-command simple-config) =>
@@ -118,4 +144,5 @@
 			command => (contains " -D html_theme_options.visitedlinkcolor=#B86644 ")
 			command => (contains " -A author=Albert Camus ")
 			command => (contains " -A mascot=Fighting Ferret ")
+			command => (contains " -d ./trees -C ")
 			command => (has-suffix " docs docs/HTML"))))
