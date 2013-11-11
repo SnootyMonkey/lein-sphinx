@@ -70,6 +70,7 @@ Normally lein-sphinx invokes sphinx-build once with the options specified, which
 
 Configuration with multiple builds:
 
+```clojure
 :sphinx {
 	:html {
 		:builder :html
@@ -89,6 +90,7 @@ Configuration with multiple builds:
 		:tags [:toc]
 	}
 }
+```
 
 Invoking lein sphinx as normal will invoke sphinx-build for each configuration:
 
