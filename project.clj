@@ -3,6 +3,8 @@
   :url "https://github.com/SnootyMonkey/lein-sphinx"
   :license {:name "Mozilla Public License v2.0"
             :url "http://www.mozilla.org/MPL/2.0/"}
+  :scm {:name "git"
+        :url "https://github.com/SnootyMonkey/lein-sphinx"}
   :eval-in-leiningen true
 
   :profiles {
