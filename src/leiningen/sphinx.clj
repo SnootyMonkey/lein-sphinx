@@ -22,7 +22,7 @@
 			:source source
 			:output (get opts :output (str source "/_build"))
 			:config (get opts :config source)
-			:rebuild (if (get opts :rebuild) "-a -E" nil)
+			:rebuild (if (get opts :rebuild) ["-a" "-E"] nil)
 			:nitpicky (if (get opts :nitpicky) "-n" nil)
 			:warn-as-error (if (get opts :warn-as-error) "-W" nil)
 			:tags (tags-args (get opts :tags []))
@@ -71,7 +71,7 @@
   			(doseq [opt (vals opts)] (build-sphinx opt))
   		:else
   			; build once for each argument that corresponds to a configuration
-  			(doseq [opt (map keyword args)] 
+  			(doseq [opt (map keyword args)]
   				(if (opt opts)
-  					(build-sphinx opt)
+  					(build-sphinx (opt opts))
   					(println "\nNo configuration found for:" (name opt) "\n"))))))

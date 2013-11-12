@@ -2,7 +2,8 @@
   (:require [midje.sweet :refer :all]
   					[midje.util :refer (testable-privates)]
   					[clojure.string :as s]
-  					[leiningen.sphinx]))
+  					[clojure.java.shell :refer (sh)]
+  					[leiningen.sphinx :refer (sphinx)]))
 
 (testable-privates leiningen.sphinx sphinx-command)
 
@@ -44,7 +45,7 @@
 		:builder :pdf
 		:source "API/REST"
 		:output "docs/PDF"
-		:tags [:pdf, :toc]
+		:tags [:toc]
 	}
 	:latex {
 		:builder :latex
@@ -132,11 +133,11 @@
 		(map-to-command {:additional-options "-d ./trees -C"}) => 
 			"sphinx-build -b html -c doc -d ./trees -C doc doc/_build")
 
-	(fact "a complete simple configuration generates the right command"
+	(fact "a simple configuration generates the right command"
 		(map-to-command simple-config) =>
 			"sphinx-build -b dirhtml -c API/REST API/REST API/REST/_build")
 
-	(fact "a complete complex configuration generates the right command"
+	(fact "a complex configuration generates the right command"
 		(let [command (map-to-command complex-config)]
 			command => (has-prefix "sphinx-build -b singlehtml -c . -a -E -n -W -t html -t draft")
 			command => (contains " -D pygments_style=solarizedlight ")
@@ -146,3 +147,28 @@
 			command => (contains " -A mascot=Fighting Ferret ")
 			command => (contains " -d ./trees -C ")
 			command => (has-suffix " docs docs/HTML"))))
+
+(facts "about valid configurations running build-sphinx"
+
+	(fact "a simple configuration runs build-sphinx with the right arguments"
+		(sphinx {:sphinx simple-config}) => anything
+		(provided
+			(sh "sphinx-build" "-b" "dirhtml" "-c" "API/REST" "API/REST" "API/REST/_build") => nil :times 1))
+
+	(fact "a multiple configuration runs build-sphinx multiple times with the right arguments"
+		(sphinx {:sphinx multiple-config}) => anything
+		(provided
+			(sh "sphinx-build" "-b" "html" "-c" "API/REST" "API/REST" "docs/HTML") => nil :times 1
+			(sh "sphinx-build" "-b" "pdf" "-c" "API/REST" "-t" "toc" "API/REST" "docs/PDF") => nil :times 1
+			(sh "sphinx-build" "-b" "latex" "-c" "API/REST" "-t" "toc" "API/REST" "docs/latex") => nil :times 1))
+
+	(fact "a multiple configuration runs build-sphinx for the specified configuration with the right arguments"
+		(sphinx {:sphinx multiple-config} "pdf") => anything
+		(provided
+			(sh "sphinx-build" "-b" "pdf" "-c" "API/REST" "-t" "toc" "API/REST" "docs/PDF") => nil :times 1))
+
+	(fact "a multiple configuration runs build-sphinx for the specified configurations with the right arguments"
+		(sphinx {:sphinx multiple-config} "html" "latex") => anything
+		(provided
+			(sh "sphinx-build" "-b" "html" "-c" "API/REST" "API/REST" "docs/HTML") => nil :times 1
+			(sh "sphinx-build" "-b" "latex" "-c" "API/REST" "-t" "toc" "API/REST" "docs/latex") => nil :times 1)))
