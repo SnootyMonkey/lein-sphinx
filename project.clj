@@ -1,8 +1,10 @@
-(defproject lein-sphinx "1.0.0-SNAPSHOT"
+(defproject lein-sphinx "1.0.0"
   :description "A Leiningen plugin to generate documentation from reStructuredText using Sphinx."
   :url "https://github.com/SnootyMonkey/lein-sphinx"
   :license {:name "Mozilla Public License v2.0"
             :url "http://www.mozilla.org/MPL/2.0/"}
+  :scm {:name "git"
+        :url "https://github.com/SnootyMonkey/lein-sphinx"}
   :eval-in-leiningen true
 
   :profiles {
