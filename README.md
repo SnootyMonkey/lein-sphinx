@@ -14,7 +14,7 @@ $ lein sphinx
 
 ## Configuration
 
-To configure lein-sphinx for your project add a map of the [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
+To configure lein-sphinx for your project, add a map of the [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
 
 The :sphinx map can have the following keys:
 
@@ -22,7 +22,7 @@ The :sphinx map can have the following keys:
 * `:source` *(default: "doc")*: Location of the documentation source directory
 * `:output` *(default: "{source}/_build")*: Location of the generated documentation
 * `:config` *(default: "{source}")*: Location of the directory containing conf.py.
-* `:rebuild` *(default: false)*: Always write all the output files and the cross reference cache (true), or use the cross reference cache and only write the new and changed output files (false). It is one of: true, false
+* `:rebuild` *(default: false)*: Always write all the output files and the cross-reference cache (true), or use the cross reference cache and only write the new and changed output files (false). It is one of: true, false
 * `:tags` *(default: [])*: A vector of keywords that define any tags used when building the docs
 * `:nitpicky` *(default: false)*: Run in nitpicky mode generated warnings for missing references.
 * `:warn-as-error` *(default: false)*: Turn all warnings into errors
@@ -77,10 +77,10 @@ Configuration with multiple builds:
 		:source "API/REST"
 		:output "docs/HTML"
 	}
-	:pdf {
-		:builder :pdf
+	:epub {
+		:builder :epub
 		:source "API/REST"
-		:output "docs/PDF"
+		:output "docs/epub"
 		:tags [:pdf, :toc]
 	}
 	:latex {
@@ -100,7 +100,7 @@ $ lein sphinx
 Invoking lein sphinx with additional arguments will invoke sphinx-build for just the specified configurations:
 
 ```console
-$ lein sphinx html pdf
+$ lein sphinx html latex
 ```
 
 ### Additional configuration options
