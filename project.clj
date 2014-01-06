@@ -10,10 +10,10 @@
   :profiles {
     :dev {
       :dependencies [
-        [midje "1.6-beta1"] ; Example-based testing https://github.com/marick/Midje
+        [midje "1.6.0"] ; Example-based testing https://github.com/marick/Midje
       ]
       :plugins [
-        [lein-midje "3.1.3-RC2"] ; Example-based testing https://github.com/marick/lein-midje
+        [lein-midje "3.1.3"] ; Example-based testing https://github.com/marick/lein-midje
       ]
     }
   }
