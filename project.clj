@@ -6,6 +6,7 @@
   :scm {:name "git"
         :url "https://github.com/SnootyMonkey/lein-sphinx"}
   :eval-in-leiningen true
+  :signing {:gpg-key "1FCE90D9"}
 
   :profiles {
     :dev {
