@@ -2,6 +2,8 @@
 	(:require [clojure.string :as s]
 						[clojure.java.shell :refer (sh)]))
 
+(def options #{:builder :source :output :config :rebuild :nitpicky :warn-as-error :tags :setting-values :html-template-values :additional-options})
+
 (defn- tags-args
 	"Output a string of tag arguments for the sequence"
 	[tags]
@@ -63,11 +65,12 @@
   [project & args]
   (let [opts (:sphinx project)]
   	(cond 
-  		(or (nil? opts) (empty? opts) (not-every? map? (vals opts)))
-  			; there is just one configuration, so build it
+  		(or (nil? opts) (empty? opts) (every? options (keys opts)))
+  			;; there are either no options or every option is a key we recognize, so
+        ;; there's just a single configuration, so build it
   			(build-sphinx opts)
   		(nil? args)
-  			; there are multiple configurations, but no arguments, so build all of them
+  			;; there are multiple configurations, but no arguments, so build all of them
   			(doseq [opt (vals opts)] (build-sphinx opt))
   		:else
   			; build once for each argument that corresponds to a configuration

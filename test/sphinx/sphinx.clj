@@ -13,6 +13,17 @@
 		:source "API/REST"
 	})
 
+;; tricky because all the options are maps - https://github.com/SnootyMonkey/lein-sphinx/issues/1
+(def tricky-config
+	{
+		:setting-values {
+			:version 1
+		}
+		:html-template-values {
+			:author "Albert Camus"
+		}
+	})
+
 (def complex-config 
 	{
 		:builder :singlehtml
@@ -137,6 +148,10 @@
 		(map-to-command simple-config) =>
 			"sphinx-build -b dirhtml -c API/REST API/REST API/REST/_build")
 
+	(fact "a tricky configuration generates the right command"
+		(map-to-command tricky-config) =>
+			"sphinx-build -b html -c doc -D version=1 -A author=Albert Camus doc doc/_build")
+
 	(fact "a complex configuration generates the right command"
 		(let [command (map-to-command complex-config)]
 			command => (has-prefix "sphinx-build -b singlehtml -c . -a -E -n -W -t html -t draft")
@@ -154,6 +169,12 @@
 		(sphinx {:sphinx simple-config}) => anything
 		(provided
 			(sh "sphinx-build" "-b" "dirhtml" "-c" "API/REST" "API/REST" "API/REST/_build") => nil :times 1))
+
+	;; https://github.com/SnootyMonkey/lein-sphinx/issues/1
+	(fact "a tricky configuration runs build-sphinx with the right arguments"
+		(sphinx {:sphinx tricky-config}) => anything
+		(provided
+			(sh "sphinx-build" "-b" "html" "-c" "doc" "-D" "version=1" "-A" "author=Albert Camus" "doc" "doc/_build") => nil :times 1))
 
 	(fact "a multiple configuration runs build-sphinx multiple times with the right arguments"
 		(sphinx {:sphinx multiple-config}) => anything

@@ -4,7 +4,7 @@ A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reSt
 
 ## Usage
 
-Put `[lein-sphinx "1.0.0"]` into the `:plugins` vector of your project.clj.
+Put `[lein-sphinx "1.0.1"]` into the `:plugins` vector of your project.clj.
 
 Once lein-sphinx is configured for your project, you can invoke it:
 
