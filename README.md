@@ -1,7 +1,7 @@
 # -= lein-sphinx =-
 
 [![MPL License](http://img.shields.io/badge/license-MPL-green.svg?style=flat)](https://www.mozilla.org/MPL/2.0/)
-[![Build Status](http://img.shields.io/travis/SnootyMonkey/lein-sphinx.svg?style=flat)](https://travis-ci.org/SnootyMonkey/coming-soon)
+[![Build Status](http://img.shields.io/travis/SnootyMonkey/lein-sphinx.svg?style=flat)](https://travis-ci.org/SnootyMonkey/lein-sphinx)
 
 A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reStructuredText](http://docutils.sourceforge.net/rst.html) using [Sphinx](http://sphinx-doc.org/).
 
