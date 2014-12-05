@@ -1,4 +1,7 @@
-# -= lein-sphinx =- [![Build Status](https://travis-ci.org/SnootyMonkey/lein-sphinx.png?branch=master)](https://travis-ci.org/SnootyMonkey/lein-sphinx)
+# -= lein-sphinx =-
+
+[![MPL License](http://img.shields.io/badge/license-MPL-green.svg?style=flat)](https://www.mozilla.org/MPL/2.0/)
+[![Build Status](http://img.shields.io/travis/SnootyMonkey/lein-sphinx.svg?style=flat)](https://travis-ci.org/SnootyMonkey/coming-soon)
 
 A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reStructuredText](http://docutils.sourceforge.net/rst.html) using [Sphinx](http://sphinx-doc.org/).
 
@@ -14,7 +17,7 @@ $ lein sphinx
 
 ## Configuration
 
-To configure lein-sphinx for your project, add a map of the [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of :sphinx in your project map (or in a specific profile if you prefer).
+To configure lein-sphinx for your project, add a map of the [sphinx-build options](http://sphinx-doc.org/invocation.html#invocation) that will be provided to sphinx-build when it is invoked. These options are provided in a map with a key of `:sphinx` in your project map (or in a specific profile if you prefer).
 
 The :sphinx map can have the following keys:
 
@@ -117,6 +120,18 @@ Configuration with additional options:
 	:warn-as-error true
 	:additional-options "-d ./trees -C"
 }
+```
+
+## Testing
+
+Tests are run in continuous integration of the `master` and `dev` branches on [Travis CI](https://travis-ci.org/SnootyMonkey/lein-sphinx):
+
+[![Build Status](http://img.shields.io/travis/SnootyMonkey/lein-sphinx.svg?style=flat)](https://travis-ci.org/SnootyMonkey/lein-sphinx)
+
+To run the tests locally:
+
+```console
+lein midje
 ```
 
 ## Issues and Feature Requests
