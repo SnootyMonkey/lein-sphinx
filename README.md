@@ -7,9 +7,13 @@ A [Leiningen](http://leiningen.org/) plugin to generate documentation from [reSt
 
 ## Usage
 
-Put `[lein-sphinx "1.0.1"]` into the `:plugins` vector of your project.clj.
+You must first have a working [installation of Sphinx](http://sphinx-doc.org/install.html).
 
-Once lein-sphinx is configured for your project, you can invoke it:
+Then put `[lein-sphinx "1.0.1"]` into the `:plugins` vector of your project.clj file.
+
+Configure lein-sphinx for your project using the configuration docs below.
+
+Once lein-sphinx is configured for your project, you can invoke it to build your docs:
 
 ```console
 $ lein sphinx
