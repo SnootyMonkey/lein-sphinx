@@ -3,10 +3,10 @@ lein: lein2
 script: lein2 midje
 branches:
   only:
-    - master
-    - dev
+  - master
+  - dev
 jdk:
-  - oraclejdk7
+- oraclejdk8
 notifications:
   hipchat:
     rooms:
