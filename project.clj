@@ -1,4 +1,4 @@
-(defproject lein-sphinx "1.0.1"
+(defproject lein-sphinx "1.0.2-SNAPSHOT"
   :description "A Leiningen plugin to generate documentation from reStructuredText using Sphinx."
   :url "https://github.com/SnootyMonkey/lein-sphinx"
   :license {:name "Mozilla Public License v2.0"
@@ -11,10 +11,10 @@
   :profiles {
     :dev {
       :dependencies [
-        [midje "1.7.0"] ; Example-based testing https://github.com/marick/Midje
+        [midje "1.8.1"] ; Example-based testing https://github.com/marick/Midje
       ]
       :plugins [
-        [lein-midje "3.1.3"] ; Example-based testing https://github.com/marick/lein-midje
+        [lein-midje "3.2"] ; Example-based testing https://github.com/marick/lein-midje
       ]
     }
   }
