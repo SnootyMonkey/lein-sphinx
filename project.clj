@@ -11,7 +11,7 @@
   :profiles {
     :dev {
       :dependencies [
-        [midje "1.8.1"] ; Example-based testing https://github.com/marick/Midje
+        [midje "1.8.3"] ; Example-based testing https://github.com/marick/Midje
       ]
       :plugins [
         [lein-midje "3.2"] ; Example-based testing https://github.com/marick/lein-midje
